@@ -1,10 +1,13 @@
+
 <app-navbar></app-navbar>
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row mb-3">
+        <div class="col-md-8">
             <h2>Bienvenue sur votre Dashboard</h2>
-            <app-details-produits></app-details-produits>
+        </div>
+        <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <button class="btn btn-outline-warning">Envoyer</button>
         </div>
     </div>
+        <app-details-produits [listeProducts]="listeProducts" ></app-details-produits>  
 </div>
-

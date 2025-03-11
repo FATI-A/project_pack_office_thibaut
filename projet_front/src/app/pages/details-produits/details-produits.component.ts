@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ProductsServicesService } from '../../service/products-services.service';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../../models/produit';
@@ -6,6 +6,12 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table'; 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon'; 
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
+
+
 
 
 @Component({
@@ -15,6 +21,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatTableModule,
     MatButtonModule,
     MatIconModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   templateUrl: './details-produits.component.html',
   styleUrl: './details-produits.component.scss',
@@ -29,35 +38,28 @@ export class DetailsProduitsComponent {
     'comments',
     'actions',
   ];
-  listeProducts: Product[] = [];
-  constructor(private productsService: ProductsServicesService) {}
-  ngOnInit() {
-    this.productsService.getInfoProducts().subscribe((data) => {
-      this.listeProducts = data;
-      console.log('Produits chargés :', this.listeProducts);
-    });
+  @Input() listeProducts: Product[] = [];
+
+  constructor(private productService: ProductsServicesService) {}
+
+  // Fonction pour modifier un produit
+  onEditProduct(product: Product): void {
+    console.log('product', product);
+    
+    this.productService.updateProduct(product.id, product).subscribe(
+      (updatedProduct) => {
+        console.log('Produit mis à jour:', updatedProduct);
+        const index = this.listeProducts.findIndex(
+          (p) => p.id === updatedProduct.id
+        );
+        if (index !== -1) {
+          this.listeProducts[index] = updatedProduct;
+          this.listeProducts = [...this.listeProducts];
+        }
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour du produit:', error);
+      }
+    );
   }
-
-  getProduit(id: number): Product | undefined {
-    return this.listeProducts.find((product) => product.id === id);
-  }
-
-  editProduct(product: any) {
-    // Logic to edit the product
-    console.log('Editing product', product);
-  }
-
-  // deleteProduct(product: any) {
-  //   // Logic to delete the product
-  //   console.log('Deleting product', product);
-  //   const index = this.listeProducts.indexOf(product);
-  //   if (index > -1) {
-  //     this.listeProducts.splice(index, 1);
-  //   }
-  // }
-
-  // addProduct() {
-  //   // Logic to add a new product
-  //   console.log('Adding a new product');
-  // }
 }

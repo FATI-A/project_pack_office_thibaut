@@ -30,6 +30,8 @@ export class LoginComponent {
         if(this.responseLogin){
           this.productsService.getInfoProducts();
           this.router.navigate(['dashboard']);
+        } else{
+          this.router.navigate(['/login']);
         }
         
     })

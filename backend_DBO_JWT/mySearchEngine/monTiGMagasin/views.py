@@ -4,6 +4,7 @@ from django.http import Http404
 from monTiGMagasin.config import baseUrl
 from monTiGMagasin.models import InfoProduct
 from monTiGMagasin.serializers import InfoProductSerializer
+from rest_framework import status
 
 #######################
 #...TME3 JWT starts...#
@@ -37,3 +38,11 @@ class InfoProductDetail(APIView):
         product = self.get_object(tig_id=tig_id)
         serializer = InfoProductSerializer(product)
         return Response(serializer.data)
+    def put(self, request, tig_id, format=None):
+        product = self.get_object(tig_id=tig_id)
+        serializer = InfoProductSerializer(product, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
