@@ -46,3 +46,22 @@ class InfoProductDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UpdateMultipleProducts(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def put(self, request, format=None):
+        product_updates = request.data.get('products', [])
+
+        updated_products = []
+        for product_data in product_updates:
+            try:
+                product = InfoProduct.objects.get(id=product_data.get('id'))
+                product.discount = product_data.get('discount', product.discount)
+                product.quantityInStock = product_data.get('quantityInStock', product.quantityInStock)
+                product.save()
+
+                updated_products.append(InfoProductSerializer(product).data)
+            except InfoProduct.DoesNotExist:
+                return Response({"error": f"Produit avec id {product_data.get('id')} introuvable."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({"updated_products": updated_products}, status=status.HTTP_200_OK)

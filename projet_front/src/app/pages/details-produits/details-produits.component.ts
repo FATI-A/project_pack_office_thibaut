@@ -46,11 +46,11 @@ export class DetailsProduitsComponent {
   onEditProduct(product: Product): void {
     console.log('product', product);
     
-    this.productService.updateProduct(product.id, product).subscribe(
+    this.productService.updateProduct(product.tig_id, product).subscribe(
       (updatedProduct) => {
         console.log('Produit mis à jour:', updatedProduct);
         const index = this.listeProducts.findIndex(
-          (p) => p.id === updatedProduct.id
+          (p) => p.tig_id === updatedProduct.tig_id
         );
         if (index !== -1) {
           this.listeProducts[index] = updatedProduct;
