@@ -11,6 +11,8 @@ import {
   TimeScale,
 } from 'chart.js';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { TabTransactionComponent } from '../tab-transaction/tab-transaction.component';
+import { FormsModule } from '@angular/forms';
 
 // Enregistrer les composants nécessaires
 Chart.register(
@@ -26,21 +28,27 @@ Chart.register(
 
 @Component({
   selector: 'app-chiffre-affaire',
-  imports: [ NavbarComponent],
+  imports: [NavbarComponent, TabTransactionComponent, FormsModule],
   templateUrl: './chiffre-affaire.component.html',
   styleUrls: ['./chiffre-affaire.component.css'],
 })
 export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
   private chart: Chart | undefined;
+  selectedMonth: number = 1;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.onMonthChange();
+  }
 
+  onMonthChange(): void {
+    console.log('Mois sélectionné:', this.selectedMonth);
+  }
   ngAfterViewInit(): void {
-   setTimeout(() => {
-     this.createChartAnnuel();
-   }, 0);
+    setTimeout(() => {
+      this.createChartAnnuel();
+    }, 0);
   }
 
   createChartAnnuel(): void {

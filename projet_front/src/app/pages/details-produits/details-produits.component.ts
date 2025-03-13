@@ -45,8 +45,6 @@ export class DetailsProduitsComponent {
 
   // Fonction pour modifier un produit
   onEditProduct(product: Product): void {
-    console.log('product', product);
-    
     this.productService.updateProduct(product.tig_id, product).subscribe(
       (updatedProduct) => {
         console.log('Produit mis à jour:', updatedProduct);

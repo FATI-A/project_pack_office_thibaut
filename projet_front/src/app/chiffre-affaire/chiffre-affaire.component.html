@@ -1,15 +1,33 @@
 <app-navbar></app-navbar>
-<div class="container mt-4">
-    <h2>Chiffre d'affaires</h2>
+<div class="container mt-4 " >
+    <h2>Détails de stock</h2>
+    <div class="d-flex justify-content-end" >
+            <select id="monthSelect" [(ngModel)]="selectedMonth" (change)="onMonthChange()" class="form-control" style="width: 200px;">
+                <option value="1">Janvier</option>
+                <option value="2">Février</option>
+                <option value="3">Mars</option>
+                <option value="4">Avril</option>
+                <option value="5">Mai</option>
+                <option value="6">Juin</option>
+                <option value="7">Juillet</option>
+                <option value="8">Août</option>
+                <option value="9">Septembre</option>
+                <option value="10">Octobre</option>
+                <option value="11">Novembre</option>
+                <option value="12">Décembre</option>
+            </select>
+    </div>
+    <app-tab-transaction></app-tab-transaction>
+    <h2 class="mt-4">Chiffre d'affaires</h2>
 
     <div class="d-flex justify-content-between mb-4">
         <button class="btn btn-warning  text-light  rounded-0 flex-fill" (click)="createChartAnnuel()">Annuel
         </button>
-        <button class="btn btn-warning  text-light  rounded-0 flex-fill" (click)="createChartHebdo()">Hebdomadaire
+        <button class="btn btn-warning text-light  rounded-0 flex-fill" (click)="createChartQuotidien()">Mensuel
         </button>
-        <button class="btn btn-warning text-light  rounded-0 flex-fill" (click)="createChartQuotidien()">Quotidien
+        <button class="btn btn-warning  text-light  rounded-0 flex-fill" (click)="createChartHebdo()">Hebdomadaire
         </button>
     </div>
 
-    <canvas id="chiffreAffaireChart"></canvas>
+    <canvas id="chiffreAffaireChart" ></canvas>
 </div>

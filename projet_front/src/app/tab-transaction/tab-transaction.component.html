@@ -1,0 +1,44 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 mt-3">
+
+    <!-- Nom du Produit Column -->
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Nom du Produit </th>
+        <td mat-cell *matCellDef="let product"> {{ product?.name }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let product"> {{ product?.date}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantityInStock">
+        <th mat-header-cell *matHeaderCellDef> Quantité </th>
+        <td mat-cell *matCellDef="let product"> {{ product?.quantityInStock}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef> Prix Achat </th>
+        <td mat-cell *matCellDef="let product"> {{ product?.price }} € </td>
+    </ng-container>
+
+    <!-- Sale Column -->
+    <ng-container matColumnDef="discount">
+        <th mat-header-cell *matHeaderCellDef> Resime </th>
+        <td mat-cell *matCellDef="let product"> {{product?.discount}} €</td>
+    </ng-container>
+
+    <ng-container matColumnDef="prixVente">
+        <th mat-header-cell *matHeaderCellDef> Prix Vente </th>
+        <td mat-cell *matCellDef="let product"> {{product?.prixVente}} €</td>
+    </ng-container>
+
+    <ng-container matColumnDef="typeTransaction">
+        <th mat-header-cell *matHeaderCellDef> Type Transaction </th>
+        <td mat-cell *matCellDef="let product"> {{ product?.typeTransaction}} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
