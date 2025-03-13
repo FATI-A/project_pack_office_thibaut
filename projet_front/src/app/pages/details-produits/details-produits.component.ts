@@ -35,6 +35,7 @@ export class DetailsProduitsComponent {
     'sale',
     'discount',
     'quantityInStock',
+    'prixVente',
     'comments',
     'actions',
   ];
@@ -62,4 +63,7 @@ export class DetailsProduitsComponent {
       }
     );
   }
+
+  // fonction pour modifier plusieur produits 
+  
 }

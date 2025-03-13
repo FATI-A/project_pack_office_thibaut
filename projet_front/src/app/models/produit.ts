@@ -10,6 +10,6 @@ export interface Product {
   tig_id: number;
   unit: string;
   category: number;
-  availability: boolean
-
+  availability: boolean;
+  prixVente : number
 }

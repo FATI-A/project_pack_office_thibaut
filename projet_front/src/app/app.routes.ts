@@ -7,6 +7,7 @@ import { DetailsProduitsComponent } from './pages/details-produits/details-produ
 import { CategoryFruitComponent } from './pages/category-fruit/category-fruit.component';
 import { CategoryPoissonsComponent } from './pages/category-poissons/category-poissons.component';
 import { CategoryCrustaceComponent } from './pages/category-crustace/category-crustace.component';
+import { ChiffreAffaireComponent } from './chiffre-affaire/chiffre-affaire.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, // Redirige vers /login par défaut
@@ -16,4 +17,5 @@ export const routes: Routes = [
   { path: 'catecory-fruit', component: CategoryFruitComponent },
   { path: 'catecory-poisson', component: CategoryPoissonsComponent },
   { path: 'catecory-crustace', component: CategoryCrustaceComponent },
+  { path: 'chiffre-affaire', component: ChiffreAffaireComponent },
 ];

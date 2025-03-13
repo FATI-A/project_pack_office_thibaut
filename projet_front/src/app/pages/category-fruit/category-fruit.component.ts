@@ -18,7 +18,10 @@ export class CategoryFruitComponent {
 
   ngOnInit() {
     this.productsService.getInfoProducts().subscribe((data) => {
-      this.listeProducts = data;
+          this.listeProducts = data.map((product) => ({
+            ...product,
+            prixVente: 0,
+          }));
       console.log('Produits chargés :', this.listeProducts);
 
       // Filtrer les produits par catégorie (par exemple catégorie 0)
