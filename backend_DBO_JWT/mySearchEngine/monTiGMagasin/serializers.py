@@ -1,7 +1,11 @@
 from rest_framework.serializers import ModelSerializer
-from monTiGMagasin.models import InfoProduct
+from monTiGMagasin.models import InfoProduct, Transaction
 
 class InfoProductSerializer(ModelSerializer):
     class Meta:
         model = InfoProduct
-        fields = ('id', 'tig_id', 'name', 'category', 'price', 'unit', 'availability', 'sale', 'discount', 'comments', 'owner', 'quantityInStock')
+        fields = '__all__'
+class TransactionSerializer(ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = '__all__'
