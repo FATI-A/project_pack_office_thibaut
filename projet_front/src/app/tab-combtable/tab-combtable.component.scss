@@ -1,0 +1,16 @@
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+#resultatComptable {
+  font-size: 16px; /* Ajuster la taille du texte selon vos préférences */
+  font-weight: normal; /* Texte par défaut */
+  display: flex;
+  justify-content: flex-end; /* Aligner le texte à la fin de la ligne */
+  align-items: center;
+  margin-top: 10px; /* Espace entre le graphique et le texte */
+}
+
+#resultatComptable #totalMarge {
+  font-weight: bold; /* Appliquer un texte en gras pour le résultat */
+}

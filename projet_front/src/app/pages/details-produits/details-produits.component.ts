@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 
 
 
+
 @Component({
   selector: 'app-details-produits',
   imports: [
@@ -62,6 +63,5 @@ export class DetailsProduitsComponent {
     );
   }
 
-  // fonction pour modifier plusieur produits 
   
 }

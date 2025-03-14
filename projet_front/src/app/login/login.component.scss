@@ -41,3 +41,14 @@ h4.card-title {
 .text-center a:hover {
   text-decoration: underline;
 }
+/* Styles pour les champs invalides */
+.is-invalid {
+    border-color: red !important;
+}
+
+/* Message d'erreur */
+.invalid-feedback {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 5px;
+}

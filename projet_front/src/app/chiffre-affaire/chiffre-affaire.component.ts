@@ -13,6 +13,10 @@ import {
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TabTransactionComponent } from '../tab-transaction/tab-transaction.component';
 import { FormsModule } from '@angular/forms';
+import { TransactionService } from '../service/transaction.service';
+import { MatCardModule } from '@angular/material/card';
+import { TabCombtableComponent } from '../tab-combtable/tab-combtable.component';
+import { CommonModule } from '@angular/common';
 
 // Enregistrer les composants nécessaires
 Chart.register(
@@ -23,23 +27,33 @@ Chart.register(
   Legend,
   CategoryScale,
   BarController,
-  TimeScale // Ajout de TimeScale pour l'axe X avec les dates
+  TimeScale 
 );
 
 @Component({
   selector: 'app-chiffre-affaire',
-  imports: [NavbarComponent, TabTransactionComponent, FormsModule],
+  imports: [
+    NavbarComponent,
+    TabTransactionComponent,
+    FormsModule,
+    MatCardModule,
+    TabCombtableComponent,
+    CommonModule,
+  ],
   templateUrl: './chiffre-affaire.component.html',
   styleUrls: ['./chiffre-affaire.component.css'],
 })
 export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
   private chart: Chart | undefined;
   selectedMonth: number = 1;
-
-  constructor() {}
+  margeMensuelle: number = 0;
+  ventes: number = 0;
+  achats: number = 0;
+  constructor(private TransactionService: TransactionService) {}
 
   ngOnInit(): void {
     this.onMonthChange();
+    this.calculerMargeMensuelle();
   }
 
   onMonthChange(): void {
@@ -213,5 +227,13 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
       dates.push(`${i}/${currentDate.getMonth() + 1}`);
     }
     return dates;
+  }
+
+  calculerMargeMensuelle(): void {
+    this.TransactionService.getMargeMensuelle().subscribe((data) => {
+      this.margeMensuelle = data.marge;
+      this.ventes = data.ventes;
+      this.achats = data.achats;
+    });
   }
 }

@@ -4,23 +4,35 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title text-center">Se connecter</h4>
-                    <form>
+                    <form (ngSubmit)="login()" #loginForm="ngForm">
                         <div class="form-group">
                             <label for="email">Username</label>
-                            <input type="text" class="form-control" id="Username" [(ngModel)]="username"  name="username"  placeholder="Entrez votre email"
-                                required>
+                            <input type="text" class="form-control" id="Username" [(ngModel)]="username" name="username"
+                                placeholder="Entrez votre email"
+                                [ngClass]="{'is-invalid': loginForm.submitted && !username}" required>
+                            <div *ngIf="loginForm.submitted && !username" class="invalid-feedback">
+                                Le nom d'utilisateur est requis.
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="password">Mot de passe</label>
-                            <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password"
-                                placeholder="Entrez votre mot de passe" required>
+                            <input type="password" class="form-control" id="password" [(ngModel)]="password"
+                                name="password" placeholder="Entrez votre mot de passe"
+                                [ngClass]="{'is-invalid': loginForm.submitted && !password}" required>
+                            <div *ngIf="loginForm.submitted && !password" class="invalid-feedback">
+                                Le mot de passe est requis.
+                            </div>
                         </div>
+                        <div *ngIf="errorMessage" class="alert alert-danger">
+                            {{ errorMessage }}
+                        </div>
+
                         <div class="form-group form-check">
                             <input type="checkbox" class="form-check-input" id="rememberMe">
                             <label class="form-check-label" for="rememberMe">Se souvenir de moi</label>
                         </div>
-                        <!-- <button type="submit" class="btn btn-primary btn-block " (click)="login()">Se connecter</button> -->
-                        <p class="btn btn-warning btn-block "  (click)="login()">Se connecter</p>
+                        <button type="submit" class="btn btn-warning btn-block" [disabled]="!loginForm.valid">Se
+                            connecter</button>
                     </form>
                     <div class="text-center mt-3">
                         <a href="#" style="color: black;">Mot de passe oublié ?</a>
@@ -30,4 +42,3 @@
         </div>
     </div>
 </div>
-

@@ -28,6 +28,23 @@
         <button class="btn btn-warning  text-light  rounded-0 flex-fill" (click)="createChartHebdo()">Hebdomadaire
         </button>
     </div>
-
+   
     <canvas id="chiffreAffaireChart" ></canvas>
+    <h2 class="mt-4">La marge</h2>
+    <mat-card class="mat-elevation-z4">
+        <mat-card-content>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <p><strong>Total Ventes :</strong> {{ ventes }} €</p>
+                    <p><strong>Total Achats :</strong> {{ achats }} €</p>
+                    <p><strong>Marge :</strong> {{ margeMensuelle }} €</p>
+                </div>
+    
+                <div *ngIf="margeMensuelle < 0" class="alert alert-danger">
+                    La marge est négative ! Pensez à revoir vos achats et ventes.
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <app-tab-combtable></app-tab-combtable>
 </div>
