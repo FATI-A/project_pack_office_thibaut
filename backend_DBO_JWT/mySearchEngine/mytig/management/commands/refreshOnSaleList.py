@@ -1,43 +1,62 @@
-from django.core.management.base import BaseCommand, CommandError
-from mytig.models import ProduitEnPromotion
-from mytig.serializers import ProduitEnPromotionSerializer
-from mytig.config import baseUrl
-import requests
-import time
+from django.core.management.base import BaseCommand
+from faker import Faker
+from random import randint
+from monTiGMagasin.models import Transaction, InfoProduct
+import random
+from datetime import datetime, timedelta
+
+fake = Faker()
 
 class Command(BaseCommand):
-    help = 'Refresh the list of products which are on sale.'
+    help = 'Remplir la table Transaction avec des données factices'
 
-    def handle(self, *args, **options):
-        self.stdout.write('['+time.ctime()+'] Refreshing data...')
-        response = requests.get(baseUrl+'products/')
-        jsondata = response.json()
-        ProduitEnPromotion.objects.all().delete()
-        for product in jsondata:
-            if product['sale']:
-                serializer = ProduitEnPromotionSerializer(data={'tigID':str(product['id'])})
-                if serializer.is_valid():
-                    serializer.save()
-                    self.stdout.write(self.style.SUCCESS('['+time.ctime()+'] Successfully added product id="%s"' % product['id']))
-        self.stdout.write('['+time.ctime()+'] Data refresh terminated.')
-# from django.core.management.base import BaseCommand
-# from monTiGMagasin.models import InfoProduct
-# from django.db.models import Count
+    def handle(self, *args, **kwargs):
+        self.seed_transactions(200)
 
-# class Command(BaseCommand):
-#     help = 'Supprime les doublons dans InfoProduct'
+    def seed_transactions(self, n=10):
+        """
+        Remplir la table Transaction avec n faux enregistrements.
+        """
 
-#     def handle(self, *args, **kwargs):
-#         # Trouver les doublons
-#         duplicates = InfoProduct.objects.values('tig_id').annotate(count=Count('tig_id')).filter(count__gt=1)
+        products = InfoProduct.objects.all()
 
-#         # Parcourez les doublons et supprimez-les
-#         for duplicate in duplicates:
-#             tig_id = duplicate['tig_id']
-#             # Obtenez tous les enregistrements en double pour ce tig_id
-#             products = InfoProduct.objects.filter(tig_id=tig_id)
+        if not products:
+            self.stdout.write(self.style.WARNING("Aucun produit dans la base de données."))
+            return
 
-#             # Gardez un seul produit et supprimez les autres
-#             products.exclude(id=products.first().id).delete()
+        for _ in range(n):
+            product = products[randint(0, len(products) - 1)]
 
-#         self.stdout.write(self.style.SUCCESS('Doublons supprimés avec succès.'))
+
+            tig_id = product.tig_id
+            name = product.name
+            priceachat = round(product.price, 2)
+            prixvente = round(product.prixvente, 2)
+            quantity_in_stock = randint(-50, 100) 
+            date = fake.date_between(start_date='-1y', end_date='today')
+
+            
+            if quantity_in_stock > 0:
+                transaction_type = 'achat'
+                
+                prixvente = 0
+            elif quantity_in_stock < 0:
+                transaction_type = 'vente'
+                
+                prixvente = max(priceachat + 5, priceachat + random.uniform(1, 10))
+                prixvente = round(prixvente, 2) 
+            else:
+                transaction_type = 'peremption'
+                prixvente = 0 
+
+            Transaction.objects.create(
+                tig_id=tig_id,
+                name=name,
+                priceachat=priceachat,
+                prixvente=prixvente,
+                quantity_in_stock=quantity_in_stock,
+                type=transaction_type,
+                date=date
+            )
+
+            self.stdout.write(self.style.SUCCESS(f"Transaction ajoutée : {name} ({transaction_type}) - Quantité: {quantity_in_stock} - Date: {date}"))
