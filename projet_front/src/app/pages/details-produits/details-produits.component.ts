@@ -36,7 +36,7 @@ export class DetailsProduitsComponent {
     'sale',
     'discount',
     'quantityInStock',
-    'prixVente',
+    'prixvente',
     'comments',
     'actions',
   ];

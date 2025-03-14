@@ -20,10 +20,7 @@ export class DashboardComponent {
   ) {}
   ngOnInit() {
     this.productsService.getInfoProducts().subscribe((data) => {
-       this.listeProducts = data.map((product) => ({
-         ...product,
-         prixVente: 0,
-       }));
+       this.listeProducts = data;
       console.log('Produits chargés :', this.listeProducts);
     });
   }

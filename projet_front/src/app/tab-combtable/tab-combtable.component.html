@@ -1,4 +1,4 @@
-<div class="mt-3">
+<div class="mt-3 mb-4">
     <h2>Résutats comptable</h2>
     <canvas id="chiffreAffaireChartCompltable"></canvas>
     <p id="resultatComptable" class="mt-4 text-center text-dark font-weight-bold">
@@ -17,10 +17,11 @@
             </li>
         </ul>
     </div>
-    
-    <p id="beneficeComptable" *ngIf="totalMarge >= 0" class="mt-4 text-center text-success font-weight-bold">
-        Bénéfice après impôt : {{ benefice | number: '1.0-0' }} €
-    </p>
+    <mat-card class="mat-elevation-z4">
+    <mat-card-content>
+    <h3 id="beneficeComptable" *ngIf="totalMarge >= 0" class="mt-4 text-center text-success font-weight-bold">
+        Bénéfice après impôt : {{ benefice | number: '1.2-2' }} €
+    </h3>
     
     <!-- Alerte si bénéfice est négatif -->
     <p id="alerteComptable" *ngIf="totalMarge < 0" class="mt-4 text-center text-danger font-weight-bold">
@@ -29,11 +30,13 @@
     
     <!-- Visuels de relaxation et confetti -->
     <div *ngIf="benefice > 0" class="text-center mt-4">
-        <p class="h5 text-success">Félicitations, vous avez dégagé un bénéfice !</p>
+        <h4 class="h5 text-success">Félicitations, vous avez dégagé un bénéfice !</h4>
         <div id="confetti" *ngIf="benefice > 0" class="confetti-visual">
             <!-- Ici vous pouvez ajouter une animation ou un visuel de confettis -->
             🎉🎉🎉
         </div>
     </div>
+    </mat-card-content>
+    </mat-card>
 </div>
 

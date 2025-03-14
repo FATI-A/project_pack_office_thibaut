@@ -167,10 +167,12 @@ export class ProductsServicesService {
   }
 
   updateMultiple(products: Product[]): Observable<Product[]> {
-   const accessToken = localStorage.getItem('access_token');
-   if (!accessToken) {
-     throw new Error('Access token is missing');
-   }
+    const accessToken = localStorage.getItem('access_token');
+    console.log('accessToken', accessToken);
+
+    if (!accessToken) {
+      throw new Error('Access token is missing');
+    }
 
     const requestOptions: RequestInit = {
       method: 'PUT',

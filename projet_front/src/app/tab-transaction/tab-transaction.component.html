@@ -8,37 +8,31 @@
 
     <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef> Date </th>
-        <td mat-cell *matCellDef="let product"> {{ product?.date}} </td>
+        <td mat-cell *matCellDef="let product"> {{ product?.date | date: 'yyyy-MM-dd'}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="quantityInStock">
+    <ng-container matColumnDef="quantity_in_stock">
         <th mat-header-cell *matHeaderCellDef> Quantité </th>
-        <td mat-cell *matCellDef="let product"> {{ product?.quantityInStock}} </td>
+        <td mat-cell *matCellDef="let product"> {{ product?.quantity_in_stock}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="price">
+    <ng-container matColumnDef="priceachat">
         <th mat-header-cell *matHeaderCellDef> Prix Achat </th>
-        <td mat-cell *matCellDef="let product"> {{ product?.price }} € </td>
+        <td mat-cell *matCellDef="let product"> {{ product?.priceachat }} € </td>
     </ng-container>
 
-    <!-- Sale Column -->
-    <ng-container matColumnDef="discount">
-        <th mat-header-cell *matHeaderCellDef> Resime </th>
-        <td mat-cell *matCellDef="let product"> {{product?.discount}} €</td>
-    </ng-container>
-
-    <ng-container matColumnDef="prixVente">
+    <ng-container matColumnDef="prixvente">
         <th mat-header-cell *matHeaderCellDef> Prix Vente </th>
-        <td mat-cell *matCellDef="let product"> {{product?.prixVente}} €</td>
+        <td mat-cell *matCellDef="let product"> {{product?.prixvente}} €</td>
     </ng-container>
 
-    <ng-container matColumnDef="typeTransaction">
+    <ng-container matColumnDef="type">
         <th mat-header-cell *matHeaderCellDef> Type Transaction </th>
-        <td mat-cell *matCellDef="let product"> {{ product?.typeTransaction}} </td>
+        <td mat-cell *matCellDef="let product"> {{ product?.type}} </td>
     </ng-container>
 
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-<mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+<mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>

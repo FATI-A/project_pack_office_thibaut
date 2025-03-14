@@ -1,11 +1,11 @@
 export interface transaction {
   id: number;
-  price: number;
+  priceachat: number;
   name?: string;
-  discount?: number; 
-  quantityInStock: number;
+  discount?: number;
+  quantity_in_stock: number;
   tig_id: number;
-  prixVente: number;
+  prixvente: number;
   date: string;
-  typeTransaction: string;
+  type: string;
 }

@@ -8,4 +8,6 @@ urlpatterns = [
     
     path('transactions/', views.TransactionList.as_view(), name='transaction-list'),
     path('transactions/<int:tig_id>/', views.TransactionList.as_view(), name='transaction-detail'),
+        
+    path('transactions/month/<int:month>/', views.TransactionList.as_view(), name='transactions-by-month'),
 ]

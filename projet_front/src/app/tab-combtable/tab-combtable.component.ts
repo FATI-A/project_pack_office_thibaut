@@ -12,6 +12,7 @@ import {
 import { TransactionService } from '../service/transaction.service';
 import 'chartjs-plugin-annotation';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 Chart.register(
   LinearScale,
@@ -26,7 +27,7 @@ Chart.register(
 
 @Component({
   selector: 'app-tab-combtable',
-  imports: [CommonModule],
+  imports: [CommonModule,MatCardModule],
   templateUrl: './tab-combtable.component.html',
   styleUrls: ['./tab-combtable.component.scss'],
 })
@@ -132,7 +133,7 @@ export class TabCombtableComponent implements OnInit {
       0
     );
     if (this.totalMarge > 0) {
-      this.benefice = this.totalMarge * 0.7; // 30% d'impôt
+      this.benefice = this.totalMarge * 0.7;
     } else {
       this.benefice = 0;
     }

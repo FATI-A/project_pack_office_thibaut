@@ -11,8 +11,8 @@ export interface Product {
   unit: string;
   category: number;
   availability: boolean;
-  prixVente: number;
+  prixvente: number;
   date: string;
   typeTransaction: string
-  
+
 }
