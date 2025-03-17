@@ -5,7 +5,7 @@
         Résultat comptable :
         <span id="totalMarge" [class.text-success]="totalMarge >= 0" [class.text-danger]="totalMarge < 0"
             class="h4 font-weight-bold">
-            {{ totalMarge }} €
+            {{ totalMarge | number: '1.2-2'}} €
         </span>
     </p>
 

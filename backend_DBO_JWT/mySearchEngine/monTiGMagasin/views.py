@@ -330,7 +330,7 @@ class TotalYearlyMargin(APIView):
                 return Response({"error": f"Erreur en récupérant les données pour le mois {month}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             
-            yearly_margin.append({"month": month, "margin": response.data["margin"]})
+            yearly_margin.append({"month": month, "marge": response.data["marge"]})
 
         return Response(yearly_margin, status=status.HTTP_200_OK)      
 

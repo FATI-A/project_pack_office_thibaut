@@ -87,6 +87,21 @@ export class TransactionService {
     const url = `http://127.0.0.1:8000/month-margin/03/`;
     return this.http.get<MonthlyMarginData>(url, { headers });
   }
+
+  getMergeForYear(): Observable<any> {
+    const accessToken = localStorage.getItem('access_token');
+
+    if (!accessToken) {
+      throw new Error('Access token is missing');
+    }
+
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${accessToken}`
+    );
+    const url = `http://127.0.0.1:8000/year-margin/`;
+    return this.http.get<any>(url, { headers });
+  }
   getMargeMensuelle(): Observable<any> {
     const ventes = -1200;
     const achats = 800;
