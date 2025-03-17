@@ -17,6 +17,7 @@ import { TransactionService } from '../service/transaction.service';
 import { MatCardModule } from '@angular/material/card';
 import { TabCombtableComponent } from '../tab-combtable/tab-combtable.component';
 import { CommonModule } from '@angular/common';
+import { MonthlyMarginData } from '../models/MonthlyMarginData';
 
 // Enregistrer les composants nécessaires
 Chart.register(
@@ -29,6 +30,8 @@ Chart.register(
   BarController,
   TimeScale 
 );
+
+
 
 @Component({
   selector: 'app-chiffre-affaire',
@@ -49,6 +52,8 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
   margeMensuelle: number = 0;
   ventes: number = 0;
   achats: number = 0;
+  transactionsData: any[] = [];
+
   constructor(private TransactionService: TransactionService) {}
 
   ngOnInit(): void {
@@ -65,52 +70,149 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
     }, 0);
   }
 
+  // createChartAnnuel(): void {
+  //   const ctx = document.getElementById(
+  //     'chiffreAffaireChart'
+  //   ) as HTMLCanvasElement;
+
+  //   if (this.chart) {
+  //     this.chart.destroy(); // Détruire l'ancien graphique
+  //   }
+
+  //   this.chart = new Chart(ctx, {
+  //     type: 'bar',
+  //     data: {
+  //       labels: [
+  //         'Jan',
+  //         'Feb',
+  //         'Mar',
+  //         'Apr',
+  //         'May',
+  //         'Jun',
+  //         'Jul',
+  //         'Aug',
+  //         'Sep',
+  //         'Oct',
+  //         'Nov',
+  //         'Dec',
+  //       ],
+  //       datasets: [
+  //         {
+  //           label: "Chiffre d'affaires (€)",
+  //           data: this.generateFakeDataAnnuel(),
+  //           backgroundColor: 'wheat',
+  //           borderColor: 'wheat',
+  //           borderWidth: 1,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       scales: {
+  //         y: {
+  //           beginAtZero: true,
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
+
   createChartAnnuel(): void {
     const ctx = document.getElementById(
       'chiffreAffaireChart'
     ) as HTMLCanvasElement;
 
     if (this.chart) {
-      this.chart.destroy(); // Détruire l'ancien graphique
+      this.chart.destroy();
     }
 
-    this.chart = new Chart(ctx, {
-      type: 'bar', // Type du graphique (ici un graphique à barres)
-      data: {
-        labels: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ], // Mois de l'année
-        datasets: [
-          {
-            label: "Chiffre d'affaires (€)", // Légende du dataset
-            data: this.generateFakeDataAnnuel(), // Données fictives pour l'année
-            backgroundColor: 'wheat',
-            borderColor: 'wheat',
-            borderWidth: 1,
+    this.TransactionService.getDailySalesForYear().subscribe(
+      (data) => {
+        console.log("Données récupérées de l'API Year:", data);
+        const monthlyData = this.processApiDataYear(data);
+
+        this.chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: [
+              'Jan',
+              'Feb',
+              'Mar',
+              'Apr',
+              'May',
+              'Jun',
+              'Jul',
+              'Aug',
+              'Sep',
+              'Oct',
+              'Nov',
+              'Dec',
+            ],
+            datasets: [
+              {
+                label: "Chiffre d'affaires (€)",
+                data: monthlyData,
+                backgroundColor: 'wheat',
+                borderColor: 'wheat',
+                borderWidth: 1,
+              },
+            ],
           },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
           },
-        },
+        });
       },
-    });
+      (error) => {
+        console.error('Erreur lors de la récupération des données:', error);
+      }
+    );
   }
+
+  // createChartHebdo(): void {
+  //   const ctx = document.getElementById(
+  //     'chiffreAffaireChart'
+  //   ) as HTMLCanvasElement;
+
+  //   if (this.chart) {
+  //     this.chart.destroy();
+  //   }
+
+  //   this.chart = new Chart(ctx, {
+  //     type: 'bar',
+  //     data: {
+  //       labels: [
+  //         'Semaine 1',
+  //         'Semaine 2',
+  //         'Semaine 3',
+  //         'Semaine 4',
+  //         'Semaine 5',
+  //       ],
+  //       datasets: [
+  //         {
+  //           label: "Chiffre d'affaires (€)",
+  //           data: this.generateFakeDataHebdo(),
+  //           backgroundColor: 'wheat',
+  //           borderColor: 'wheat',
+  //           borderWidth: 1,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       scales: {
+  //         y: {
+  //           beginAtZero: true,
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 
   createChartHebdo(): void {
     const ctx = document.getElementById(
@@ -120,37 +222,86 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
     if (this.chart) {
       this.chart.destroy();
     }
+    this.TransactionService.getDailySalesForWeek().subscribe(
+      (data) => {
+        console.log("Données récupérées de l'API:", data);
 
-    this.chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: [
+        // Traitement des données pour obtenir les totaux hebdomadaires
+        const weeklyData = this.processApiDataHebdo(data);
+
+        // Création des labels pour les semaines (Semaine 1, Semaine 2, etc.)
+        const weekLabels = [
           'Semaine 1',
           'Semaine 2',
           'Semaine 3',
           'Semaine 4',
           'Semaine 5',
-        ],
-        datasets: [
-          {
-            label: "Chiffre d'affaires (€)",
-            data: this.generateFakeDataHebdo(),
-            backgroundColor: 'wheat',
-            borderColor: 'wheat',
-            borderWidth: 1,
+        ];
+
+        // Création du graphique avec les données traitées
+        this.chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: weekLabels, // Labels des semaines
+            datasets: [
+              {
+                label: "Chiffre d'affaires (€)",
+                data: weeklyData, // Données hebdomadaires traitées
+                backgroundColor: 'wheat',
+                borderColor: 'wheat',
+                borderWidth: 1,
+              },
+            ],
           },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
           },
-        },
+        });
       },
-    });
+      (error) => {
+        console.error('Erreur lors de la récupération des données:', error);
+      }
+    );
   }
+
+  // createChartQuotidien(): void {
+  //   const ctx = document.getElementById(
+  //     'chiffreAffaireChart'
+  //   ) as HTMLCanvasElement;
+
+  //   if (this.chart) {
+  //     this.chart.destroy();
+  //   }
+
+  //   this.chart = new Chart(ctx, {
+  //     type: 'bar',
+  //     data: {
+  //       labels: this.getDatesForCurrentMonth(), // Utiliser les dates du mois
+  //       datasets: [
+  //         {
+  //           label: "Chiffre d'affaires (€)",
+  //           data: this.generateFakeDataQuotidien(),
+  //           backgroundColor: 'wheat',
+  //           borderColor: 'wheat',
+  //           borderWidth: 1,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       scales: {
+  //         y: {
+  //           beginAtZero: true,
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 
   createChartQuotidien(): void {
     const ctx = document.getElementById(
@@ -161,31 +312,43 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
       this.chart.destroy();
     }
 
-    this.chart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: this.getDatesForCurrentMonth(), // Utiliser les dates du mois
-        datasets: [
-          {
-            label: "Chiffre d'affaires (€)",
-            data: this.generateFakeDataQuotidien(),
-            backgroundColor: 'wheat',
-            borderColor: 'wheat',
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
-  }
+    this.TransactionService.getDailySalesForMonth().subscribe(
+      (data) => {
+        console.log("Données récupérées de l'API:", data);
 
+        const labels = this.getDatesForCurrentMonth();
+
+        const chartData = this.processApiData(data);
+
+        this.chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Chiffre d'affaires (€)",
+                data: chartData,
+                backgroundColor: 'wheat',
+                borderColor: 'wheat',
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données:', error);
+      }
+    );
+  }
   // Générer des données fictives pour l'année (par mois)
   generateFakeDataAnnuel(): number[] {
     const fakeData = [];
@@ -215,6 +378,37 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
     return fakeData;
   }
 
+  processApiData(data: any[]): number[] {
+    const salesData: number[] = [];
+
+    for (let i = 1; i <= 31; i++) {
+      const transaction = data.find((d) => d.day === i);
+      salesData.push(transaction ? transaction.total : 0);
+    }
+
+    return salesData;
+  }
+
+  processApiDataYear(data: any[]): number[] {
+    const monthlySales: number[] = [];
+
+    for (let i = 1; i <= 12; i++) {
+      const transaction = data.find((d) => d.month === i);
+      monthlySales.push(transaction ? transaction.total : 0);
+    }
+    return monthlySales;
+  }
+
+  processApiDataHebdo(data: any[]): number[] {
+    const weeklySales: number[] = [];
+    for (let i = 1; i <= 5; i++) {
+      const weekData = data.find((d) => d.week === i);
+      weeklySales.push(weekData ? weekData.total : 0);
+    }
+
+    return weeklySales; 
+  }
+
   getDatesForCurrentMonth(): string[] {
     const currentDate = new Date();
     const daysInMonth = new Date(
@@ -229,11 +423,22 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
     return dates;
   }
 
-  calculerMargeMensuelle(): void {
-    this.TransactionService.getMargeMensuelle().subscribe((data) => {
-      this.margeMensuelle = data.marge;
-      this.ventes = data.ventes;
-      this.achats = data.achats;
-    });
-  }
+calculerMargeMensuelle(): void {
+  this.TransactionService.getMergeForMonth().subscribe(
+    (data: MonthlyMarginData) => { 
+      console.log("dataMerge", data);
+
+      if (data && data.marge !== undefined && data.ventes !== undefined && data.achats !== undefined) {
+        this.margeMensuelle = data.marge;
+        this.ventes = data.ventes;
+        this.achats = data.achats;
+      } else {
+        console.error("Aucune donnée trouvée ou données invalides");
+      }
+    },
+    (error) => {
+      console.error("Erreur lors de la récupération des données", error);
+    }
+  );
+}
 }

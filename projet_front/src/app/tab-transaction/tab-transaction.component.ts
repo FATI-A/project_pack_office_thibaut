@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ProductsServicesService } from '../service/products-services.service';
 import { Product } from '../models/produit';
 import { transaction } from '../models/transaction';
@@ -6,7 +6,13 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
-import { ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import {
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { TransactionService } from '../service/transaction.service';
 import { CommonModule } from '@angular/common';
 
@@ -19,12 +25,13 @@ import { CommonModule } from '@angular/common';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    CommonModule, 
+    CommonModule,
   ],
   templateUrl: './tab-transaction.component.html',
   styleUrl: './tab-transaction.component.scss',
 })
-export class TabTransactionComponent implements OnInit, AfterViewInit {
+export class TabTransactionComponent implements OnInit, AfterViewInit,OnChanges {
+  @Input() month: number = 1;
   displayedColumns: string[] = [
     'name',
     'date',
@@ -40,16 +47,22 @@ export class TabTransactionComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.getDataTransactionByMonth();
+    console.log('Mois reçu dans app-tab-transaction : ', this.month);
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['month']) {
+      this.getDataTransactionByMonth();
+    }
+  }
   getDataTransactionByMonth() {
-    this.TransactionService.getTransactions().subscribe(
+    this.TransactionService.getTransactions(this.month).subscribe(
       (data) => {
         this.dataSource.data = data;
-        console.log('Transactions récupérées:', data);
       },
       (error) => {
         console.error(
@@ -60,6 +73,6 @@ export class TabTransactionComponent implements OnInit, AfterViewInit {
     );
 
     this.paginator.pageIndex = 1;
-    this.paginator.pageSize = 10;
+    this.paginator.pageSize = 8;
   }
 }
