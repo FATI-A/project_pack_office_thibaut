@@ -53,6 +53,7 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
   ventes: number = 0;
   achats: number = 0;
   transactionsData: any[] = [];
+  totalChiffreAffaire: number = 0;
 
   constructor(private TransactionService: TransactionService) {}
 
@@ -130,7 +131,8 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
       (data) => {
         console.log("Données récupérées de l'API Year:", data);
         const monthlyData = this.processApiDataYear(data);
-
+         this.calculateTotalChiffreAffaire(monthlyData);
+    
         this.chart = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -228,6 +230,7 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
 
         // Traitement des données pour obtenir les totaux hebdomadaires
         const weeklyData = this.processApiDataHebdo(data);
+        this.calculateTotalChiffreAffaire(weeklyData);
 
         // Création des labels pour les semaines (Semaine 1, Semaine 2, etc.)
         const weekLabels = [
@@ -319,6 +322,7 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
         const labels = this.getDatesForCurrentMonth();
 
         const chartData = this.processApiData(data);
+        this.calculateTotalChiffreAffaire(chartData);
 
         this.chart = new Chart(ctx, {
           type: 'bar',
@@ -406,9 +410,12 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
       weeklySales.push(weekData ? weekData.total : 0);
     }
 
-    return weeklySales; 
+    return weeklySales;
   }
 
+  calculateTotalChiffreAffaire(data: number[]): void {
+    this.totalChiffreAffaire = data.reduce((acc, value) => acc + value, 0);
+  }
   getDatesForCurrentMonth(): string[] {
     const currentDate = new Date();
     const daysInMonth = new Date(
@@ -423,22 +430,27 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
     return dates;
   }
 
-calculerMargeMensuelle(): void {
-  this.TransactionService.getMergeForMonth().subscribe(
-    (data: MonthlyMarginData) => { 
-      console.log("dataMerge", data);
+  calculerMargeMensuelle(): void {
+    this.TransactionService.getMergeForMonth().subscribe(
+      (data: MonthlyMarginData) => {
+        console.log('dataMerge', data);
 
-      if (data && data.marge !== undefined && data.ventes !== undefined && data.achats !== undefined) {
-        this.margeMensuelle = data.marge;
-        this.ventes = data.ventes;
-        this.achats = data.achats;
-      } else {
-        console.error("Aucune donnée trouvée ou données invalides");
+        if (
+          data &&
+          data.marge !== undefined &&
+          data.ventes !== undefined &&
+          data.achats !== undefined
+        ) {
+          this.margeMensuelle = data.marge;
+          this.ventes = data.ventes;
+          this.achats = data.achats;
+        } else {
+          console.error('Aucune donnée trouvée ou données invalides');
+        }
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données', error);
       }
-    },
-    (error) => {
-      console.error("Erreur lors de la récupération des données", error);
-    }
-  );
-}
+    );
+  }
 }
