@@ -54,7 +54,8 @@ class InfoProductDetail(APIView):
                     else:
                         prixvente = product.prixvente
             else:
-                    transaction_type = 'péremption'
+                    transaction_type = 'péremption' 
+                    prixvente= 0 
     
             product.prixvente = prixvente
             product.save()
