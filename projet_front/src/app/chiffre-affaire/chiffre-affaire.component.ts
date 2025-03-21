@@ -71,53 +71,7 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
     }, 0);
   }
 
-  // createChartAnnuel(): void {
-  //   const ctx = document.getElementById(
-  //     'chiffreAffaireChart'
-  //   ) as HTMLCanvasElement;
-
-  //   if (this.chart) {
-  //     this.chart.destroy(); // Détruire l'ancien graphique
-  //   }
-
-  //   this.chart = new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: [
-  //         'Jan',
-  //         'Feb',
-  //         'Mar',
-  //         'Apr',
-  //         'May',
-  //         'Jun',
-  //         'Jul',
-  //         'Aug',
-  //         'Sep',
-  //         'Oct',
-  //         'Nov',
-  //         'Dec',
-  //       ],
-  //       datasets: [
-  //         {
-  //           label: "Chiffre d'affaires (€)",
-  //           data: this.generateFakeDataAnnuel(),
-  //           backgroundColor: 'wheat',
-  //           borderColor: 'wheat',
-  //           borderWidth: 1,
-  //         },
-  //       ],
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       scales: {
-  //         y: {
-  //           beginAtZero: true,
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
-
+ 
   createChartAnnuel(): void {
     const ctx = document.getElementById(
       'chiffreAffaireChart'
@@ -176,45 +130,6 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // createChartHebdo(): void {
-  //   const ctx = document.getElementById(
-  //     'chiffreAffaireChart'
-  //   ) as HTMLCanvasElement;
-
-  //   if (this.chart) {
-  //     this.chart.destroy();
-  //   }
-
-  //   this.chart = new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: [
-  //         'Semaine 1',
-  //         'Semaine 2',
-  //         'Semaine 3',
-  //         'Semaine 4',
-  //         'Semaine 5',
-  //       ],
-  //       datasets: [
-  //         {
-  //           label: "Chiffre d'affaires (€)",
-  //           data: this.generateFakeDataHebdo(),
-  //           backgroundColor: 'wheat',
-  //           borderColor: 'wheat',
-  //           borderWidth: 1,
-  //         },
-  //       ],
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       scales: {
-  //         y: {
-  //           beginAtZero: true,
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
 
   createChartHebdo(): void {
     const ctx = document.getElementById(
@@ -271,40 +186,6 @@ export class ChiffreAffaireComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
-  // createChartQuotidien(): void {
-  //   const ctx = document.getElementById(
-  //     'chiffreAffaireChart'
-  //   ) as HTMLCanvasElement;
-
-  //   if (this.chart) {
-  //     this.chart.destroy();
-  //   }
-
-  //   this.chart = new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: this.getDatesForCurrentMonth(), // Utiliser les dates du mois
-  //       datasets: [
-  //         {
-  //           label: "Chiffre d'affaires (€)",
-  //           data: this.generateFakeDataQuotidien(),
-  //           backgroundColor: 'wheat',
-  //           borderColor: 'wheat',
-  //           borderWidth: 1,
-  //         },
-  //       ],
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       scales: {
-  //         y: {
-  //           beginAtZero: true,
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
 
   createChartQuotidien(): void {
     const ctx = document.getElementById(
